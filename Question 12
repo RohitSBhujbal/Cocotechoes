@@ -1,0 +1,72 @@
+import java.util.*;
+
+public class LanguageTranslation {
+
+    static class Person {
+        String name;
+        Set<String> languages;
+
+        //i am give here constructor and there arguments as a name and language
+        Person(String name, String... languages) {
+            this.name = name;
+            this.languages = new HashSet<>(Arrays.asList(languages)); //use here hashset by the collection framework
+        }
+    }
+   // in the collection framework i am give here the list of person in the list of array
+    static List<Person> people = new ArrayList<>();
+
+    public static void main(String[] args) {
+        initializeData();  // call the method as a initalze Data
+
+        Scanner scanner = new Scanner(System.in);
+        //take a input from the user
+        System.out.print("Enter the name of Person 1: ");
+        String person1Name = scanner.nextLine();
+
+        System.out.print("Enter the name of Person 2: ");
+        String person2Name = scanner.nextLine();
+          ///call the method of  findPersonByName and store data in the referance of Person
+        Person person1 = findPersonByName(person1Name);
+        Person person2 = findPersonByName(person2Name);
+      //here i give the condition it is ppreset the return the person
+        if (person1 != null && person2 != null) {
+            int translationCount = calculateTranslationCount(person1, person2);
+            System.out.println("To translate between " + person1.name + " and " + person2.name +
+                    ", you will need " + translationCount + " person(s) for translation.");
+        } else {
+            System.out.println("Person not found. Please check the names entered.");
+        }
+    }
+
+// all data are add in the arraylist
+    static void initializeData() {
+        people.add(new Person("person 1", "hindi", "english", "gujarati"));
+        people.add(new Person("person 2", "hindi", "odia"));
+        people.add(new Person("person 3", "tamil", "english"));
+        people.add(new Person("person 4", "odia", "spanish"));
+        people.add(new Person("person 5", "gujarati", "tamil"));
+        people.add(new Person("person 6", "tamil", "odia"));
+        people.add(new Person("person 7", "telugu", "english"));
+        people.add(new Person("person 8", "telugu", "hindi"));
+        people.add(new Person("person 9", "marathi", "hindi"));
+        people.add(new Person("person 10", "english", "spanish"));
+    }
+
+    static Person findPersonByName(String name) {
+        for (Person person : people) {
+            if (person.name.equalsIgnoreCase(name)) {
+                return person;
+            }
+        }
+        return null;
+    }
+
+//calcluate the count of a object list
+    static int calculateTranslationCount(Person person1, Person person2) {
+        Set<String> commonLanguages = new HashSet<>(person1.languages);
+        commonLanguages.retainAll(person2.languages);
+
+        int translationCount = person1.languages.size() + person2.languages.size() - 2 * commonLanguages.size();
+        return translationCount;
+    }
+}
